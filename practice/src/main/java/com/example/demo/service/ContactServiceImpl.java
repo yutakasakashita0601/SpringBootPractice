@@ -1,5 +1,9 @@
 package com.example.demo.service;
 
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +30,36 @@ public class ContactServiceImpl implements ContactService {
 		contact.setContactType(contactForm.getContactType());
 		contact.setBody(contactForm.getBody());
 		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		contact.setCreatedAt(now);
+		contact.setUpdatedAt(now);
+		
 		contactRepository.save(contact);
 
+	}
+	
+	@Override
+	public Optional<Contact> findById(Long id) {
+		return contactRepository.findById(id);
+	}
+	
+	@Override
+	public List<Contact> getAllContacts() {
+		return contactRepository.findAll();
+	}
+	
+	public List<Contact> findAll() {
+        return contactRepository.findAll();
+	}
+	
+	@Override
+	public void saveContact(Contact contact) {
+		contactRepository.save(contact);
+	}
+	
+	@Override
+	public void deleteById(Long id) {
+		contactRepository.deleteById(id);
 	}
 
 }
