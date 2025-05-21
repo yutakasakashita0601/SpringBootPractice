@@ -38,7 +38,7 @@ public class AdminController {
 		return "admin/signup";
 	}
 	
-	@PostMapping("admin/signup")
+	@PostMapping("/admin/signup")
 	public String signup (@Validated @ModelAttribute AdminForm adminForm,
 			              BindingResult result,
 			              Model model) {
@@ -98,7 +98,15 @@ public class AdminController {
 	
 	
 	@PostMapping("/admin/contacts/{id}/edit")
-	public String updateContact(@PathVariable Long id, @ModelAttribute Contact contact) {
+	public String updateContact(@PathVariable Long id,  @Validated @ModelAttribute("contact") Contact contact,
+			                    BindingResult bindingResult,
+			                    Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("contact", contact);
+	        return "admin/contact_edit";
+	    }
+
+		
 		Contact existing = contactService.findById(id)
 		    .orElseThrow(() -> new IllegalArgumentException("お問い合わせが見つかりません(ID:" + id + ")"));
 		
